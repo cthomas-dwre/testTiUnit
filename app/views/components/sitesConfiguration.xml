@@ -1,0 +1,27 @@
+<!--
+// ©2017 salesforce.com, inc. All rights reserved.
+// View file for site, country and language selector
+-->
+
+<Alloy>
+    <View class="container">
+        <View id="site_config" class="line_item">
+            <Label id="site_label" class="dropdown_label" accessibilityValue="site_label"/>
+            <View id="country_view" class="dropdown">
+                <Require id="site_dropdown_view" src="components/siteDropDown" type="view"/>
+            </View>
+        </View>
+        <View id="country_config" class="line_item">
+            <Label id="country_label" class="dropdown_label" accessibilityValue="country_label"/>
+            <View id="country_view" class="dropdown">
+                <Require id="country_dropdown_view" src="components/countryDropDown" type="view"/>
+            </View>
+        </View>
+        <View id="language_config" class="line_item">
+            <Label id="language_label" class="dropdown_label" accessibilityValue="language_label"/>
+            <View id="language_view" class="dropdown">
+                <Require id="language_dropdown_view" src="components/languageDropDown" type="view"/>
+            </View>
+        </View>
+    </View>
+</Alloy>

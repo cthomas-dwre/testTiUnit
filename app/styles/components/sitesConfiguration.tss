@@ -1,0 +1,48 @@
+// ©2017 salesforce.com, inc. All rights reserved.
+
+// TSS file for site, country and language selector
+
+'.container': {
+    layout: 'vertical',
+    height: Ti.UI.SIZE,
+    top: 0,
+    width: Ti.UI.FILL,
+    backgroundColor: Alloy.Styles.color.background.white
+},
+
+'.line_item': {
+    layout: 'horizontal',
+    top: 5,
+    left: 32,
+    right: 32,
+    width: Ti.UI.FILL,
+    height: Ti.UI.SIZE
+},
+
+'.dropdown_label': {
+    top: 8,
+    textAlign: Ti.UI.TEXT_ALIGNMENT_RIGHT,
+    font: Alloy.Styles.detailValueFont,
+    width: '25%',
+    height: 38
+},
+
+'.dropdown': {
+    top: 10,
+    left: 10,
+    layout: 'horizontal',
+    width: '71%',
+    height: 38
+},
+
+'#language_label': {
+    textid: '_Language__'
+},
+
+'#country_label': {
+    textid: '_Country__'
+},
+
+'#site_label': {
+    textid: '_Site__'
+}
