@@ -142,3 +142,13 @@ function onSiteSelected(event) {
         });
     });
 }
+
+if(Alloy.UNIT_TEST){
+    module.exports = {
+        init: init,
+        deinit: deinit,
+        updateSiteSelectedItem: updateSiteSelectedItem,
+        initializeSites: initializeSites,
+        onSiteSelected: onSiteSelected
+    }
+}
