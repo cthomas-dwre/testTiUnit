@@ -179,6 +179,9 @@ describe('app/controllers/associate/login.js', function() {
     Alloy.Styles = {
         appFont: {}
     };
+    Alloy.Animations = Alloy.Animations||{
+        bounce:{}
+    };
     Alloy.CFG = Alloy.CFG || {};
     Alloy.CFG.show_forgot_password_link = true;
     Alloy.CFG.login_change_country_link = true;
