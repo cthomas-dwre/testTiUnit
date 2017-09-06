@@ -21,7 +21,8 @@ describe('app/controllers/components/siteDropDown.js', function() {
     };
 
     var createController = sinon.stub().returns({
-        updateSelectedItem: sinon.stub()
+        updateSelectedItem: sinon.stub(),
+        getView: sinon.stub()
     });
 
     $ = require('tiunit/mockcontroller').createControllerMock('app/controllers/components/siteDropDown.js');
@@ -33,13 +34,7 @@ describe('app/controllers/components/siteDropDown.js', function() {
         'trigger': sinon.stub(),
         'siteSelectionDropDown': {
             add: sinon.stub()
-        },
-        'site_select': {
-            updateSelectedItem: sinon.stub(),
-            getView: function() {
-                return {};
-            }
-        },
+        }
     });
 
     Alloy.Styles = {
@@ -72,14 +67,13 @@ describe('app/controllers/components/siteDropDown.js', function() {
             Alloy.createController = createController;
             controllerUnderTest.init();
         })
-        it('should have called initializeSites', function() {
-            expect(initializeSites.called).toEqual(true);
+        it('should have called $.siteSelectionDropDown.add', function() {
+            expect($.siteSelectionDropDown.add.called).toEqual(true);
         });
     });
 
-    describe('init default', function() {
+    describe('initializeSites with default', function() {
         beforeAll(function() {
-            initializeSites = sinon.stub();
             Alloy.createController = createController;
             Alloy.CFG.sitesSupported = {
                 'SiteGenesis' : {
@@ -87,10 +81,10 @@ describe('app/controllers/components/siteDropDown.js', function() {
                     'default': true
                 }
             };
-            controllerUnderTest.init();
+            controllerUnderTest.initializeSites();
         })
-        it('should have called initializeSites', function() {
-            expect(initializeSites.called).toEqual(true);
+        it('should have called $.siteSelectionDropDown.add', function() {
+            expect($.siteSelectionDropDown.add.called).toEqual(true);
         });
     });
 
@@ -148,7 +142,7 @@ describe('app/controllers/components/siteDropDown.js', function() {
     describe('onSiteSelected different host', function() {
         beforeAll(function() {
             Alloy.CFG.sitesSupported = {
-                'SiteGenesis' : {
+                'SiteGenesis': {
                     'storefront_host': 'staging'
                 }
             };
