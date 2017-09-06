@@ -6,7 +6,6 @@
 //---------------------------------------------------
 // ## VARIABLES
 
-var appSettings = require('appSettings');
 var logger = require('logging')('components:sitesConfiguration', getFullControllerPath($.__controllerPath));
 var displaySiteDropDown;
 var selectedCountry;
@@ -158,4 +157,17 @@ function handleEmptyLanguageDropdown() {
     $.trigger('sitesConfiguration:next_button', {
         error : true
     });
+}
+
+if(Alloy.UNIT_TEST){
+    module.exports = {
+        init: init,
+        deinit: deinit,
+        onSiteChange: onSiteChange,
+        onCountryChange: onCountryChange,
+        onLanguageChange: onLanguageChange,
+        updateSelectedItems: updateSelectedItems,
+        updateLabels: updateLabels,
+        handleEmptyLanguageDropdown: handleEmptyLanguageDropdown
+    }
 }

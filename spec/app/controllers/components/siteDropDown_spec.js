@@ -29,10 +29,10 @@ describe('app/controllers/components/siteDropDown.js', function() {
 
     $ = _.extend($, {
         '__controllerPath': 'path',
-        'stopListening': sinon.stub(),
-        'destroy': sinon.stub(),
-        'trigger': sinon.stub(),
-        'siteSelectionDropDown': {
+        stopListening: sinon.stub(),
+        destroy: sinon.stub(),
+        trigger: sinon.stub(),
+        siteSelectionDropDown: {
             add: sinon.stub()
         }
     });
@@ -54,8 +54,8 @@ describe('app/controllers/components/siteDropDown.js', function() {
     Alloy.CFG.countryConfig = {};
 
     var event = {
-        'item': {
-            'value': 'SiteGenesis'
+        item: {
+            value: 'SiteGenesis'
         }
     };
 
@@ -76,9 +76,9 @@ describe('app/controllers/components/siteDropDown.js', function() {
         beforeAll(function() {
             Alloy.createController = createController;
             Alloy.CFG.sitesSupported = {
-                'SiteGenesis' : {
-                    'displayName': 'United States',
-                    'default': true
+                SiteGenesis : {
+                    displayName: 'United States',
+                    default: true
                 }
             };
             controllerUnderTest.initializeSites();
@@ -119,7 +119,7 @@ describe('app/controllers/components/siteDropDown.js', function() {
     describe('onSiteSelected failure', function() {
         beforeAll(function() {
             Alloy.Dialog = {
-                'showAlertDialog': sinon.stub()
+                showAlertDialog: sinon.stub()
             }
             var new_stub = _.extend(stub, {
                 appConfiguration: { 
@@ -142,8 +142,8 @@ describe('app/controllers/components/siteDropDown.js', function() {
     describe('onSiteSelected different host', function() {
         beforeAll(function() {
             Alloy.CFG.sitesSupported = {
-                'SiteGenesis': {
-                    'storefront_host': 'staging'
+                SiteGenesis: {
+                    storefront_host: 'staging'
                 }
             };
             controllerUnderTest.onSiteSelected(event);
