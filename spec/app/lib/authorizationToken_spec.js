@@ -1,26 +1,27 @@
 var proxyquire = require('proxyquire').noCallThru().noPreserveCache();
 describe('app/lib/authorizationToken.js', function() {
+    var libUnderTest, httpClient;
+    beforeAll(function() {
+        var stub = {
+            logging: sinon.stub().returns({
+                info: sinon.stub(),
+                trace: sinon.stub(),
+                log: sinon.stub(),
+                error: sinon.stub(),
+                secureLog: sinon.stub()
+            })
+        };
 
-    var stub = {
-        logging: sinon.stub().returns({
-            info: sinon.stub(),
-            trace: sinon.stub(),
-            log: sinon.stub(),
-            error: sinon.stub(),
-            secureLog: sinon.stub()
-        })
-    };
+        libUnderTest = proxyquire('../../../app/lib/authorizationToken.js', stub);
 
-    var libUnderTest = proxyquire('../../../app/lib/authorizationToken.js', stub);
-
-    var httpClient = {
-        open: sinon.stub(),
-        setRequestHeader: sinon.stub(),
-        setWithCredentials: sinon.stub(),
-        responseText: '{"expires_in": 1}',
-        access_token: 'some_token'
-    };
-
+        httpClient = {
+            open: sinon.stub(),
+            setRequestHeader: sinon.stub(),
+            setWithCredentials: sinon.stub(),
+            responseText: '{"expires_in": 1}',
+            access_token: 'some_token'
+        };
+    });
     describe('fetchToken onerror', function() {
         var promise;
         beforeAll(function() {
