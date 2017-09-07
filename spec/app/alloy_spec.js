@@ -1,37 +1,38 @@
 var proxyquire = require('proxyquire').noCallThru().noPreserveCache();
 
 describe('app/alloy.js', function() {
+    var controllerUnderTest, clearCookies, stub;
+    beforeAll(function() {
+        Ti = require('tiunit/jsca.api.parser').parse();
 
-    Ti = require('tiunit/jsca.api.parser').parse();
+        clearCookies = sinon.spy();
 
-    var clearCookies = sinon.spy();
+        Ti.UI.create2DMatrix = sinon.stub().returns({
+            scale: sinon.stub()
+        });
 
-    Ti.UI.create2DMatrix = sinon.stub().returns({
-        scale: sinon.stub()
+        Ti.Network.createHTTPClient = sinon.stub().returns({
+            'clearCookies': clearCookies
+        });
+
+        stub = {
+            'logging': sinon.stub(),
+            'appConfiguration': {
+                'loadDefaultConfigs': sinon.stub()
+            },
+            'alloyAdditions': {},
+            'appResume': {},
+            'imageUtils': {},
+            'alloy/moment': {},
+            'com.demandware.SwissArmyUtils': {
+                'redirectConsoleLogToFile': sinon.stub()
+            },
+            'alloy/styles/demandware': {},
+            'DialogMgr': sinon.stub()
+        };
+
+        controllerUnderTest = proxyquire('../../app/alloy.js', stub);
     });
-
-    Ti.Network.createHTTPClient = sinon.stub().returns({
-        'clearCookies': clearCookies
-    });
-
-    var stub = {
-        'logging': sinon.stub(),
-        'appConfiguration': {
-            'loadDefaultConfigs': sinon.stub()
-        },
-        'alloyAdditions': {},
-        'appResume': {},
-        'imageUtils': {},
-        'alloy/moment': {},
-        'com.demandware.SwissArmyUtils': {
-            'redirectConsoleLogToFile': sinon.stub()
-        },
-        'alloy/styles/demandware': {},
-        'DialogMgr': sinon.stub()
-    };
-
-    var controllerUnderTest = proxyquire('../../app/alloy.js', stub);
-
     describe('Alloy.Globals.resetCookies', function() {
 
         beforeAll(function() {
