@@ -1,66 +1,72 @@
 var proxyquire = require('proxyquire').noCallThru().noPreserveCache();
 
-describe('app/models/baskets.js', function() {
+describe('Endless-Aisle/app/models/baskets.js', function() {
+    var stub, modelFileUnderTest, BasketsModel, mockedBasketsModelData,
+        modelUnderTest, BasketsCollection, collectionUnderTest;
+    beforeAll(function() {
 
-    ucfirst = sinon.stub().callsFake(function(str) {
-        return str;
-    });
 
-    var stub = {
+        ucfirst = sinon.stub().callsFake(function(str) {
+            return str;
+        });
 
-        'logging': sinon.stub().returns({
-            info: sinon.stub()
-        }),
+        stub = {
 
-        'dw/instore/StorefrontHelperSecure': Backbone.Model.extend({
-            setModelName: sinon.stub(),
-            save: sinon.stub().usingPromise(new _.Deferred()).resolves({
-                get: sinon.stub()
-            })
-        }),
+            'logging': sinon.stub().returns({
+                info: sinon.stub()
+            }),
 
-        'alloy/models/productItem': {
-            Model: Backbone.Model.extend({})
-        },
-        'alloy/models/billingAddress': {
-            Model: Backbone.Model.extend({})
-        },
-        'alloy/models/shipment': {
-            Model: Backbone.Model.extend({})
-        },
-        'alloy/models/couponItem': {
-            Model: Backbone.Model.extend({})
-        },
-        'alloy/models/orderPriceAdjustment': {
-            Model: Backbone.Model.extend({})
-        },
-        'alloy/moment': sinon.stub().returns({
-            format: sinon.stub().returns('2017-07-01')
-        }),
-        'EAUtils': {
-            toCurrency: sinon.stub().callsFake(function(val) {
-                return val;
-            })
+            'dw/instore/StorefrontHelperSecure': Backbone.Model.extend({
+                setModelName: sinon.stub(),
+                save: sinon.stub().usingPromise(new _.Deferred()).resolves({
+                    get: sinon.stub()
+                })
+            }),
+
+            'alloy/models/productItem': {
+                Model: Backbone.Model.extend({})
+            },
+            'alloy/models/billingAddress': {
+                Model: Backbone.Model.extend({})
+            },
+            'alloy/models/shipment': {
+                Model: Backbone.Model.extend({})
+            },
+            'alloy/models/couponItem': {
+                Model: Backbone.Model.extend({})
+            },
+            'alloy/models/orderPriceAdjustment': {
+                Model: Backbone.Model.extend({})
+            },
+            'alloy/moment': sinon.stub().returns({
+                format: sinon.stub().returns('2017-07-01')
+            }),
+            'EAUtils': {
+                toCurrency: sinon.stub().callsFake(function(val) {
+                    return val;
+                })
+            }
+
+        };
+        modelFileUnderTest = proxyquire('../../../Endless-Aisle/app/models/baskets.js', stub);
+        BasketsModel = modelFileUnderTest.definition.extendModel(Backbone.Model.extend({
+            apiCall: sinon.stub()
+        }));
+        mockedBasketsModelData = {
+            product_items: [{}],
+            billing_address: {},
+            shipments: [{}],
+            coupon_items: [{}],
+            order_price_adjustments: [{}]
         }
+        modelUnderTest = new BasketsModel(mockedBasketsModelData);
 
-    };
-    var modelFileUnderTest = proxyquire('../../../app/models/baskets.js', stub);
-    var BasketsModel = modelFileUnderTest.definition.extendModel(Backbone.Model.extend({
-        apiCall: sinon.stub()
-    }));
-    var mockedBasketsModelData = {
-        product_items: [{}],
-        billing_address: {},
-        shipments: [{}],
-        coupon_items: [{}],
-        order_price_adjustments: [{}]
-    }
-    var modelUnderTest = new BasketsModel(mockedBasketsModelData);
+        BasketsCollection = modelFileUnderTest.definition.extendCollection(Backbone.Collection.extend({
+            apiCall: sinon.stub()
+        }));
 
-    var BasketsCollection = modelFileUnderTest.definition.extendCollection(Backbone.Collection.extend({
-        apiCall: sinon.stub()
-    }));
-    var collectionUnderTest = new BasketsCollection();
+        collectionUnderTest = new BasketsCollection();
+    });
 
     describe('model.syncOnEtagFailure', function() {
         var returnedPromise;
@@ -625,6 +631,7 @@ describe('app/models/baskets.js', function() {
                 fetchToken: sinon.stub().usingPromise(new _.Deferred()).resolves(),
                 getToken: sinon.stub().returns('some_token')
             };
+
             returnedPromise = modelUnderTest.createOrder({});
 
         });
@@ -774,6 +781,7 @@ describe('app/models/baskets.js', function() {
     describe('model.abandonOrder', function() {
         var returnedPromise;
         beforeAll(function() {
+
             modelUnderTest.get('shipments').at(0).set({
                 'shipping_method': (new Backbone.Model({
                     price_override: 'true',
@@ -922,7 +930,7 @@ describe('app/models/baskets.js', function() {
     describe('model.getPaymentBalance', function() {
         beforeAll(function() {
             modelUnderTest.set({
-                payment_balance:50
+                payment_balance: 50
             });
 
         });
@@ -935,7 +943,7 @@ describe('app/models/baskets.js', function() {
     describe('model.doesPaymentRequireSignature', function() {
         beforeAll(function() {
             modelUnderTest.set({
-                payment_instruments:[{
+                payment_instruments: [{
                     c_eaRequireSignature: true
                 }]
             });
@@ -993,9 +1001,9 @@ describe('app/models/baskets.js', function() {
         beforeAll(function() {
             modelUnderTest.get('shipments').at(0).set({
                 shipping_method: new Backbone.Model({
-                        price_override: 'true',
-                        price_override_type: 'shipping',
-                        price_override_value: 50
+                    price_override: 'true',
+                    price_override_type: 'shipping',
+                    price_override_value: 50
                 })
             });
 
