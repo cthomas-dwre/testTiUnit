@@ -1,197 +1,201 @@
 var proxyquire = require('proxyquire').noCallThru().noPreserveCache();
 describe('app/controllers/associate/login.js', function() {
-    var addRemoveEventListener = {
-        addEventListener: sinon.stub(),
-        removeEventListener: sinon.stub()
-    };
+    var stub, controllerUnderTest;
 
-    var stub = {
-        'appSettings': {
-            setSetting: sinon.stub()
-        },
-        'logging': sinon.stub().returns({
-            info: sinon.stub()
-        }),
-        'dialogUtils': {
-            'showActivityIndicator': sinon.stub()
-        },
-        'config/countries': {
-            'countryConfig': {
-                'us': {
-                    'displayName': 'United State'
+    beforeAll(function() {
+        var addRemoveEventListener = {
+            addEventListener: sinon.stub(),
+            removeEventListener: sinon.stub()
+        };
+
+        stub = {
+            'appSettings': {
+                setSetting: sinon.stub()
+            },
+            'logging': sinon.stub().returns({
+                info: sinon.stub()
+            }),
+            'dialogUtils': {
+                'showActivityIndicator': sinon.stub()
+            },
+            'config/countries': {
+                'countryConfig': {
+                    'us': {
+                        'displayName': 'United State'
+                    }
+                }
+            },
+            'EAUtils': {
+                isSymbolBasedLanguage: sinon.stub(),
+                isLatinBasedLanguage: sinon.stub().returns(true),
+                updateLocaleGlobalVariables: function() {
+                    var deferred = new _.Deferred();
+                    deferred.resolve();
+                    return deferred.promise();
                 }
             }
-        },
-        'EAUtils': {
-            isSymbolBasedLanguage: sinon.stub(),
-            isLatinBasedLanguage: sinon.stub().returns(true),
-            updateLocaleGlobalVariables: function() {
-                var deferred = new _.Deferred();
-                deferred.resolve();
-                return deferred.promise();
-            }
+        };
+
+        $ = require('tiunit/mockcontroller').createControllerMock('app/controllers/associate/login.js');
+
+
+        $ = _.extend($, {
+            '__controllerPath': 'path',
+            'employee_code': _.extend(addRemoveEventListener, {
+                setValue: sinon.stub(),
+                setHintText: sinon.stub()
+            }),
+            'employee_pin': addRemoveEventListener,
+            'login_button': _.extend(addRemoveEventListener, {
+                setTitle: sinon.stub()
+            }),
+            'success_ok_button': addRemoveEventListener,
+            'country_cancel_button': addRemoveEventListener,
+            'country_apply_button': _.extend(addRemoveEventListener, {
+                setEnabled: sinon.stub()
+            }),
+
+            'new_password_cancel_button': addRemoveEventListener,
+            'success_subtitle_label': _.extend(addRemoveEventListener, {
+                setFont: sinon.stub()
+            }),
+            'change_country_label': _.extend(addRemoveEventListener, {
+                setHeight: sinon.stub(),
+                setVisible: sinon.stub(),
+                setText: sinon.stub(),
+            }),
+            'storefront_label': {
+                setText: sinon.stub(),
+            },
+            'country_label': {
+                setText: sinon.stub(),
+            },
+            'assoc_title': {
+                setText: sinon.stub(),
+            },
+            'country_dropdown_view': {
+                init: sinon.stub(),
+                deinit: sinon.stub(),
+                updateCountrySelectedItem: sinon.stub()
+            },
+            'language_dropdown_view': {
+                init: sinon.stub(),
+                deinit: sinon.stub(),
+                populateLanguages: sinon.stub(),
+                updateLanguageSelectedItem: sinon.stub(),
+                updateLanguageSelectedValue: sinon.stub()
+            },
+            'forgot_password_label': _.extend(addRemoveEventListener, {
+                'setVisible': sinon.stub()
+            }),
+            'new_password_button': addRemoveEventListener,
+            'new_password': _.extend(addRemoveEventListener, {
+                hide: sinon.stub(),
+                show: sinon.stub(),
+                setHeight: sinon.stub()
+            }),
+            'country_selector': {
+                hide: sinon.stub(),
+                show: sinon.stub(),
+                setHeight: sinon.stub()
+            },
+            'contents': {
+                show: sinon.stub(),
+                hide: sinon.stub(),
+                setHeight: sinon.stub(),
+                getVisible: sinon.stub()
+            },
+            'assoc_button': _.extend(addRemoveEventListener, {
+                setFont: sinon.stub()
+            }),
+            'assoc_cancel_button': _.extend(addRemoveEventListener, {
+                setFont: sinon.stub()
+            }),
+            'manager_view': {
+                deinit: sinon.stub(),
+                clearErrorMessage: sinon.stub()
+            },
+
+            'login_error_label': {
+                setText: sinon.stub(),
+                setHeight: sinon.stub(),
+                hide: sinon.stub(),
+                show: sinon.stub(),
+                setHeight: sinon.stub()
+            },
+            'new_password_subtitle_label': {
+                setHeight: sinon.stub(),
+                hide: sinon.stub(),
+                show: sinon.stub(),
+                setText: sinon.stub()
+            },
+            'login_subtitle_label': {
+                setHeight: sinon.stub(),
+                hide: sinon.stub(),
+                show: sinon.stub(),
+                setText: sinon.stub()
+            },
+            'assoc_subtitle_label': {
+                setHeight: sinon.stub(),
+                show: sinon.stub(),
+                setText: sinon.stub()
+            },
+            'assoc_error_label': {
+                setText: sinon.stub(),
+                hide: sinon.stub(),
+                setHeight: sinon.stub(),
+                show: sinon.stub()
+            },
+            'new_password_error_label': {
+                setText: sinon.stub(),
+                hide: sinon.stub(),
+                setHeight: sinon.stub(),
+                show: sinon.stub()
+            },
+            'getNewPassword': {
+                setValue: sinon.stub()
+            },
+            'password_verify': {
+                setValue: sinon.stub(),
+                setHintText: sinon.stub()
+            },
+            'password': {
+                setHintText: sinon.stub(),
+                setValue: sinon.stub()
+            },
+            'assoc_code': {
+                setValue: sinon.stub(),
+                setHintText: sinon.stub()
+            },
+            'login_title': {
+                setText: sinon.stub()
+            },
+            'success_title': {
+                setText: sinon.stub()
+            },
+            'new_password_title': {
+                setText: sinon.stub()
+            },
+            'stopListening': sinon.stub(),
+            'destroy': sinon.stub()
+        });
+
+        Alloy.Styles = {
+            appFont: {}
+        };
+        Alloy.Animations = Alloy.Animations || {
+            bounce: {}
+        };
+        Alloy.CFG = Alloy.CFG || {};
+        Alloy.CFG.show_forgot_password_link = true;
+        Alloy.CFG.login_change_country_link = true;
+
+        Alloy.eventDispatcher = {
+            trigger: sinon.stub()
         }
-    };
 
-    $ = require('tiunit/mockcontroller').createControllerMock('app/controllers/associate/login.js');
-
-    $ = _.extend($, {
-        '__controllerPath': 'path',
-        'employee_code': _.extend(addRemoveEventListener, {
-            setValue: sinon.stub(),
-            setHintText: sinon.stub()
-        }),
-        'employee_pin': addRemoveEventListener,
-        'login_button': _.extend(addRemoveEventListener, {
-            setTitle: sinon.stub()
-        }),
-        'success_ok_button': addRemoveEventListener,
-        'country_cancel_button': addRemoveEventListener,
-        'country_apply_button': _.extend(addRemoveEventListener, {
-            setEnabled: sinon.stub()
-        }),
-
-        'new_password_cancel_button': addRemoveEventListener,
-        'success_subtitle_label': _.extend(addRemoveEventListener, {
-            setFont: sinon.stub()
-        }),
-        'change_country_label': _.extend(addRemoveEventListener, {
-            setHeight: sinon.stub(),
-            setVisible: sinon.stub(),
-            setText: sinon.stub(),
-        }),
-        'storefront_label': {
-            setText: sinon.stub(),
-        },
-        'country_label': {
-            setText: sinon.stub(),
-        },
-        'assoc_title': {
-            setText: sinon.stub(),
-        },
-        'country_dropdown_view': {
-            init: sinon.stub(),
-            deinit: sinon.stub(),
-            updateCountrySelectedItem: sinon.stub()
-        },
-        'language_dropdown_view': {
-            init: sinon.stub(),
-            deinit: sinon.stub(),
-            populateLanguages: sinon.stub(),
-            updateLanguageSelectedItem: sinon.stub(),
-            updateLanguageSelectedValue: sinon.stub()
-        },
-        'forgot_password_label': _.extend(addRemoveEventListener, {
-            'setVisible': sinon.stub()
-        }),
-        'new_password_button': addRemoveEventListener,
-        'new_password': _.extend(addRemoveEventListener, {
-            hide: sinon.stub(),
-            show: sinon.stub(),
-            setHeight: sinon.stub()
-        }),
-        'country_selector': {
-            hide: sinon.stub(),
-            show: sinon.stub(),
-            setHeight: sinon.stub()
-        },
-        'contents': {
-            show: sinon.stub(),
-            hide: sinon.stub(),
-            setHeight: sinon.stub(),
-            getVisible: sinon.stub()
-        },
-        'assoc_button': _.extend(addRemoveEventListener, {
-            setFont: sinon.stub()
-        }),
-        'assoc_cancel_button': _.extend(addRemoveEventListener, {
-            setFont: sinon.stub()
-        }),
-        'manager_view': {
-            deinit: sinon.stub(),
-            clearErrorMessage: sinon.stub()
-        },
-
-        'login_error_label': {
-            setText: sinon.stub(),
-            setHeight: sinon.stub(),
-            hide: sinon.stub(),
-            show: sinon.stub(),
-            setHeight: sinon.stub()
-        },
-        'new_password_subtitle_label': {
-            setHeight: sinon.stub(),
-            hide: sinon.stub(),
-            show: sinon.stub(),
-            setText: sinon.stub()
-        },
-        'login_subtitle_label': {
-            setHeight: sinon.stub(),
-            hide: sinon.stub(),
-            show: sinon.stub(),
-            setText: sinon.stub()
-        },
-        'assoc_subtitle_label': {
-            setHeight: sinon.stub(),
-            show: sinon.stub(),
-            setText: sinon.stub()
-        },
-        'assoc_error_label': {
-            setText: sinon.stub(),
-            hide: sinon.stub(),
-            setHeight: sinon.stub(),
-            show: sinon.stub()
-        },
-        'new_password_error_label': {
-            setText: sinon.stub(),
-            hide: sinon.stub(),
-            setHeight: sinon.stub(),
-            show: sinon.stub()
-        },
-        'getNewPassword': {
-            setValue: sinon.stub()
-        },
-        'password_verify': {
-            setValue: sinon.stub(),
-            setHintText: sinon.stub()
-        },
-        'password': {
-            setHintText: sinon.stub(),
-            setValue: sinon.stub()
-        },
-        'assoc_code': {
-            setValue: sinon.stub(),
-            setHintText: sinon.stub()
-        },
-        'login_title': {
-            setText: sinon.stub()
-        },
-        'success_title': {
-            setText: sinon.stub()
-        },
-        'new_password_title': {
-            setText: sinon.stub()
-        },
-        'stopListening': sinon.stub(),
-        'destroy': sinon.stub()
+        controllerUnderTest = proxyquire('../../../../app/controllers/associate/login.js', stub);
     });
-
-    Alloy.Styles = {
-        appFont: {}
-    };
-    Alloy.Animations = Alloy.Animations||{
-        bounce:{}
-    };
-    Alloy.CFG = Alloy.CFG || {};
-    Alloy.CFG.show_forgot_password_link = true;
-    Alloy.CFG.login_change_country_link = true;
-
-    Alloy.eventDispatcher = {
-        trigger: sinon.stub()
-    }
-
-    var controllerUnderTest = proxyquire('../../../../app/controllers/associate/login.js', stub);
-
     describe('init', function() {
         var createController = sinon.stub().returns({
             setTextFields: sinon.stub()
