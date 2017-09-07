@@ -1,6 +1,6 @@
 var proxyquire = require('proxyquire').noCallThru().noPreserveCache();
 
-describe('Endless-Aisle/app/models/users.js', function() {
+describe('app/models/users.js', function() {
     var stub, modelFileUnderTest, UserModel, modelUnderTest;
 
     beforeAll(function() {
@@ -10,7 +10,7 @@ describe('Endless-Aisle/app/models/users.js', function() {
             'logging': sinon.stub()
         };
 
-        modelFileUnderTest = proxyquire('../../../Endless-Aisle/app/models/users.js', stub);
+        modelFileUnderTest = proxyquire('../../../app/models/users.js', stub);
 
         UserModel = modelFileUnderTest.definition.extendModel(Backbone.Model.extend({
             apiCall: sinon.stub()
@@ -18,7 +18,7 @@ describe('Endless-Aisle/app/models/users.js', function() {
 
         modelUnderTest = new UserModel();
     });
-    
+
     describe('successFunction', function() {
         var model;
         beforeAll(function() {
