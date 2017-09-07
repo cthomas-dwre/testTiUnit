@@ -1,6 +1,6 @@
 var proxyquire = require('proxyquire').noCallThru().noPreserveCache();
 
-describe('Endless-Aisle/app/models/baskets.js', function() {
+describe('app/models/baskets.js', function() {
     var stub, modelFileUnderTest, BasketsModel, mockedBasketsModelData,
         modelUnderTest, BasketsCollection, collectionUnderTest;
     beforeAll(function() {
@@ -48,7 +48,7 @@ describe('Endless-Aisle/app/models/baskets.js', function() {
             }
 
         };
-        modelFileUnderTest = proxyquire('../../../Endless-Aisle/app/models/baskets.js', stub);
+        modelFileUnderTest = proxyquire('../../../app/models/baskets.js', stub);
         BasketsModel = modelFileUnderTest.definition.extendModel(Backbone.Model.extend({
             apiCall: sinon.stub()
         }));
