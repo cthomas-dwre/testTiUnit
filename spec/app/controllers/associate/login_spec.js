@@ -1,8 +1,9 @@
 var proxyquire = require('proxyquire').noCallThru().noPreserveCache();
 describe('app/controllers/associate/login.js', function() {
-    var stub, controllerUnderTest;
+    var stub, controllerUnderTest, clock;
 
     beforeAll(function() {
+        clock = sinon.useFakeTimers();
         var addRemoveEventListener = {
             addEventListener: sinon.stub(),
             removeEventListener: sinon.stub()
@@ -196,6 +197,11 @@ describe('app/controllers/associate/login.js', function() {
 
         controllerUnderTest = proxyquire('../../../../app/controllers/associate/login.js', stub);
     });
+
+    afterAll(function() {
+        clock.restore();
+    });
+
     describe('init', function() {
         var createController = sinon.stub().returns({
             setTextFields: sinon.stub()
