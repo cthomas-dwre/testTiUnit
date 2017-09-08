@@ -1,7 +1,9 @@
+// ©2017 salesforce.com, inc. All rights reserved.
+
 var proxyquire = require('proxyquire').noCallThru().noPreserveCache();
-describe('app/controllers/components/siteDropDown.js', function () {
+describe('app/controllers/components/siteDropDown.js', function() {
     var stub, controllerUnderTest, createController, event;
-    beforeAll(function () {
+    beforeAll(function() {
         stub = {
             appSettings: {
                 setSetting: sinon.stub()
@@ -13,7 +15,7 @@ describe('app/controllers/components/siteDropDown.js', function () {
                 showActivityIndicator: sinon.stub()
             },
             appConfiguration: {
-                loadConfigurations: function () {
+                loadConfigurations: function() {
                     var deferred = new _.Deferred();
                     deferred.resolve();
                     return deferred.promise();
@@ -63,19 +65,19 @@ describe('app/controllers/components/siteDropDown.js', function () {
         controllerUnderTest = proxyquire('../../../../app/controllers/components/siteDropDown.js', stub);
     });
 
-    describe('init', function () {
-        beforeAll(function () {
+    describe('init', function() {
+        beforeAll(function() {
             Alloy.createController = createController;
             controllerUnderTest.init();
         });
-        it('should have called $.siteSelectionDropDown.add', function () {
+        it('should have called $.siteSelectionDropDown.add', function() {
             // console.dir($);
             expect($.siteSelectionDropDown.add.called).toEqual(true);
         });
     });
 
-    describe('initializeSites with default', function () {
-        beforeAll(function () {
+    describe('initializeSites with default', function() {
+        beforeAll(function() {
             Alloy.createController = createController;
             Alloy.CFG.sitesSupported = {
                 SiteGenesis: {
@@ -85,48 +87,48 @@ describe('app/controllers/components/siteDropDown.js', function () {
             };
             controllerUnderTest.initializeSites();
         });
-        it('should have called $.siteSelectionDropDown.add', function () {
+        it('should have called $.siteSelectionDropDown.add', function() {
             // console.dir($);
             expect($.siteSelectionDropDown.add.called).toEqual(true);
         });
     });
 
-    describe('deinit', function () {
-        beforeAll(function () {
+    describe('deinit', function() {
+        beforeAll(function() {
             removeAllChildren = sinon.stub();
             controllerUnderTest.deinit();
         });
-        it('should have called $.destroy', function () {
+        it('should have called $.destroy', function() {
             expect($.destroy.called).toEqual(true);
         });
     });
 
-    describe('updateSiteSelectedItem', function () {
-        beforeAll(function () {
+    describe('updateSiteSelectedItem', function() {
+        beforeAll(function() {
             controllerUnderTest.updateSiteSelectedItem();
         });
-        it('should have called $.site_select.updateSelectedItem', function () {
+        it('should have called $.site_select.updateSelectedItem', function() {
             expect($.site_select.updateSelectedItem.called).toEqual(true);
         });
     });
 
-    describe('onSiteSelected', function () {
-        beforeAll(function () {
+    describe('onSiteSelected', function() {
+        beforeAll(function() {
             controllerUnderTest.onSiteSelected(event);
         });
-        it('should have called $.trigger', function () {
+        it('should have called $.trigger', function() {
             expect($.trigger.calledWith('site:change')).toEqual(true);
         });
     });
 
-    describe('onSiteSelected failure', function () {
-        beforeAll(function () {
+    describe('onSiteSelected failure', function() {
+        beforeAll(function() {
             Alloy.Dialog = {
                 showAlertDialog: sinon.stub()
             }
             var new_stub = _.extend(stub, {
                 appConfiguration: {
-                    loadConfigurations: function () {
+                    loadConfigurations: function() {
                         var deferred = new _.Deferred();
                         deferred.reject({ message: 'something' });
                         return deferred.promise();
@@ -137,13 +139,13 @@ describe('app/controllers/components/siteDropDown.js', function () {
 
             controllerUnderTest2.onSiteSelected(event);
         });
-        it('should have called showAlertDialog', function () {
+        it('should have called showAlertDialog', function() {
             expect(Alloy.Dialog.showAlertDialog.called).toEqual(true);
         });
     });
 
-    describe('onSiteSelected different host', function () {
-        beforeAll(function () {
+    describe('onSiteSelected different host', function() {
+        beforeAll(function() {
             Alloy.CFG.sitesSupported = {
                 SiteGenesis: {
                     storefront_host: 'staging'
@@ -151,7 +153,7 @@ describe('app/controllers/components/siteDropDown.js', function () {
             };
             controllerUnderTest.onSiteSelected(event);
         });
-        it('should have called $.trigger', function () {
+        it('should have called $.trigger', function() {
             expect($.trigger.called).toEqual(true);
         });
     });

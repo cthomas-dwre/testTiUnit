@@ -1,3 +1,5 @@
+// ©2017 salesforce.com, inc. All rights reserved.
+
 var proxyquire = require('proxyquire').noCallThru().noPreserveCache();
 describe('app/lib/authorizationToken.js', function() {
     var libUnderTest, httpClient;
